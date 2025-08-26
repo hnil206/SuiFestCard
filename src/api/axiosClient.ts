@@ -1,7 +1,8 @@
+import { TwitterApiBaseUrl } from '@/utils/constant';
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: 'https://3c390b0de3f344aab6ca88576f6634fc.api.mockbin.io',
+  baseURL: TwitterApiBaseUrl,
   headers: {
     'Content-Type': 'application/json',
   },

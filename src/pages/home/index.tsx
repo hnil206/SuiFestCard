@@ -7,7 +7,7 @@ const Home = () => {
       HomePage
       <div>
         <Link
-          to="/login"
+          to="/card-generation"
           activeOptions={
             {
               // If the route points to the root of it's parent,
@@ -20,7 +20,7 @@ const Home = () => {
           // Make "active" links bold
           activeProps={{ className: `font-bold` }}
         >
-          To Login Page
+          To Card Generation Page
         </Link>
       </div>
     </div>
