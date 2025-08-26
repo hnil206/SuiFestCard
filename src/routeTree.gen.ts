@@ -11,13 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root';
-import { Route as CartGenerationImport } from './routes/card-generation';
 import { Route as IndexImport } from './routes/index';
+import { Route as PreviewImport } from './routes/preview';
+import { Route as TestImport } from './routes/test';
 
 // Create/Update Routes
 
-const CardGenerationRoute = CartGenerationImport.update({
-  path: '/card-generation',
+const TestRoute = TestImport.update({
+  path: '/test',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const PreviewRoute = PreviewImport.update({
+  path: '/preview',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -37,11 +43,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
-    '/card-generation': {
-      id: '/card-generation';
-      path: '/card-generation';
-      fullPath: '/card-generation';
-      preLoaderRoute: typeof CartGenerationImport;
+    '/preview': {
+      id: '/preview';
+      path: '/preview';
+      fullPath: '/preview';
+      preLoaderRoute: typeof PreviewImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/test': {
+      id: '/test';
+      path: '/test';
+      fullPath: '/test';
+      preLoaderRoute: typeof TestImport;
       parentRoute: typeof rootRoute;
     };
   }
@@ -49,7 +62,11 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute, CardGenerationRoute });
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  PreviewRoute,
+  TestRoute,
+});
 
 /* prettier-ignore-end */
 
@@ -60,14 +77,18 @@ export const routeTree = rootRoute.addChildren({ IndexRoute, CardGenerationRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/card-generation"
+        "/preview",
+        "/test"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/card-generation": {
-      "filePath": "card-generation.tsx"
+    "/preview": {
+      "filePath": "preview.tsx"
+    },
+    "/test": {
+      "filePath": "test.tsx"
     }
   }
 }
