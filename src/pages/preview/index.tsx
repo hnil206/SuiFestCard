@@ -30,11 +30,10 @@ const PreviewPage = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-199px)] flex-col items-center justify-center">
-      <div className="mx-auto w-full min-w-[320px] max-w-[685px] bg-black text-white lg:px-0">
+      <div className="mx-auto w-full min-w-[320px] max-w-[685px] bg-black px-4 text-white lg:px-0">
         <div className="flex w-full justify-center">
-          <div className="flex w-full rounded-r-[32px] lg:min-h-[515px]" ref={captureRef}>
+          <div className="flex w-full overflow-hidden rounded-[32px] lg:min-h-[515px]" ref={captureRef}>
             <CardPreview
-              className="w-full rounded-l-[32px]"
               name={state.name}
               username={state.username.startsWith('@') ? state.username.slice(1) : state.username}
               avatarUrl={state.image}
@@ -57,7 +56,7 @@ const PreviewPage = () => {
           onClick={handleCapture}
         >
           Share on
-          <img src="/x-logo.svg" alt="" className="h-5 w-5 text-black" />
+          <img src="/xlogo.png" alt="" className="h-5 w-5" />
         </button>
       </div>
     </div>
