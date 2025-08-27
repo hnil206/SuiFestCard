@@ -55,11 +55,7 @@ export const CardPreview = ({
               <img src={avatarUrl} alt="Profile" className="h-full w-full" />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzbYTyntexjeYwbQP1GHJ2KwQAg_zZHmuecQ&s"
-                  alt="Sui Logo"
-                  className="h-full w-full p-2"
-                />
+                <img src="/example.png" alt="Sui Logo" className="h-full w-full" />
               </div>
             )}
           </div>
