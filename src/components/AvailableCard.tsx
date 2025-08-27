@@ -14,7 +14,9 @@ const AvailableCard = () => {
       </div>
       {/* Bottom Section */}
       <div>
-        <div className="mb-4 text-4xl font-black tracking-tight lg:text-6xl">SuiFest</div>
+        <div className="mb-4 text-4xl font-black tracking-tight text-black lg:text-6xl">
+          <img src="/logo.png" alt="logo suifest" className="h-10"></img>
+        </div>
         <div className="flex justify-between text-sm font-medium lg:text-2xl">
           <span>Oct.2nd</span>
           <span>Singapore</span>
