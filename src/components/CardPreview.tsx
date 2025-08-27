@@ -49,15 +49,13 @@ export const CardPreview = ({
       <div className="relative z-10 flex flex-1 items-center justify-center">
         <div>
           <div
-            className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
+            className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-black text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
           >
-            {displayAvatar ? (
-              <img src={avatarUrl} alt="Profile" className="h-full w-full" />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <img src="/example.png" alt="Sui Logo" className="h-full w-full" />
-              </div>
-            )}
+            <img
+              src={displayAvatar ? avatarUrl : '/example.png'}
+              alt={displayAvatar ? 'Profile' : 'Sui Logo'}
+              className="h-full w-full object-cover"
+            />
           </div>
           <div
             className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[10px] md:text-base lg:px-2 lg:py-1 lg:text-lg`}
