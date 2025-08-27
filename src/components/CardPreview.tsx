@@ -39,48 +39,38 @@ export const CardPreview = ({
 
   return (
     <div
-      className={`relative flex flex-col justify-between overflow-hidden text-white ${className || ''}`}
+      className={`relative flex h-full w-full flex-col overflow-hidden text-white ${className || ''}`}
       style={{
         backgroundImage: `url(${bg})`,
         backgroundSize: 'cover',
       }}
     >
-      <div className="p-3 lg:p-8">
-        <p
-          className={`text-base font-medium leading-tight tracking-[-0.02em] md:text-2xl lg:text-${textSize} ${textClassName || ''}`}
-        >
-          I'm going to
-        </p>
-        <p
-          className={`text-base font-medium leading-tight tracking-[-0.02em] md:text-2xl lg:text-${textSize} ${textClassName || ''}`}
-        >
-          Sui Fest
-        </p>
+      <div className="p-3 lg:mr-9 lg:p-8">
+        <p className={`font-medium leading-tight lg:text-${textSize} ${textClassName || ''}`}>Speaker</p>
       </div>
-      <div className="flex items-center justify-center lg:px-8 lg:py-2">
+      <div className="flex justify-center pt-10 lg:px-8 lg:pt-24">
         <div>
           <div
-            className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[400px] lg:w-[400px] ${imageClassName || ''}`}
+            className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
           >
             {displayAvatar ? (
               <img src={avatarUrl} alt="Profile" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-orange-400">
-                <img src="/logo-sui.png" alt="Sui Logo" className="object-contain p-2" />
+              <div className="flex h-full w-full items-center justify-center">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzbYTyntexjeYwbQP1GHJ2KwQAg_zZHmuecQ&s"
+                  alt="Sui Logo"
+                  className="object-contain p-2"
+                />
               </div>
             )}
           </div>
           <div
-            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[8px] lg:px-2 lg:py-1 lg:text-lg`}
+            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[8px] text-base lg:px-2 lg:py-1 lg:text-lg`}
           >
             @{username}
           </div>
         </div>
-      </div>
-      <div
-        className={`flex justify-end px-3 pt-2 text-base font-medium lg:p-6 lg:text-${textSize} ${textClassName || ''}`}
-      >
-        sui.io/suifest
       </div>
     </div>
   );

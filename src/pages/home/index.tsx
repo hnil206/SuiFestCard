@@ -23,22 +23,22 @@ const Home = () => {
       <div className="flex min-h-0 items-center">
         <div className="h-full w-full items-center px-6 py-12 text-white">
           <div className="mx-auto max-w-[1200px]">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,_700px)_484px]">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,_532px)_652px]">
               {/* Preview */}
-              <div className="flex max-w-[700px] items-start justify-center md:justify-start">
+              <div className="flex items-start justify-center md:justify-start">
                 <CardPreview
                   name={fullName}
                   username={handle}
                   template={template}
                   avatarUrl={avatar}
-                  textSize="6xl"
+                  textSize="8xl"
                   imageSize="120px"
-                  textClassName="text-base md:!text-base lg:!text-6xl"
-                  imageClassName="h-[120px] w-[120px] lg:h-[400px] lg:w-[400px]"
-                  className="h-full w-full rounded-[32px] border-[16px] border-[#1f1f1f] text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] lg:rounded-[64px]"
+                  textClassName="text-5xl"
+                  imageClassName="h-[200px] w-[200px] lg:h-[400px] lg:w-[400px]"
+                  className="h-full w-full rounded-[32px] border-[16px] border-[#1f1f1f] text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] sm:h-[494px] sm:w-[335px] lg:h-[784px] lg:w-[532px] lg:rounded-[64px]"
                 />
               </div>
-
+              {/* <div className='w-full h-full max-w-[784px]'> */}
               {/* Control Panel */}
               <CardControlPanel
                 fullName={fullName}
@@ -51,6 +51,7 @@ const Home = () => {
                 onTemplateChange={setTemplate}
                 onGenerate={handleGenerate}
               />
+              {/* </div> */}
             </div>
           </div>
         </div>

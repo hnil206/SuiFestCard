@@ -18,7 +18,9 @@ const PreviewPage = () => {
   const handleCapture = async () => {
     if (captureRef.current) {
       const canvas = await html2canvas(captureRef.current);
+      console.log('Canvas generated:', canvas);
       const dataUrl = canvas.toDataURL('image/png');
+      console.log('Data URL:', dataUrl);
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       const file = new File([blob], 'suifest-card.png', { type: 'image/png' });

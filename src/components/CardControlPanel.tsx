@@ -47,8 +47,8 @@ export function CardControlPanel(props: CardControlPanelProps) {
   };
 
   return (
-    <div className="h-full w-full max-w-[484px] rounded-[32px] border border-white/10 bg-[#4B4B4B33] p-8 lg:rounded-[64px]">
-      <h2 className="text-2xl font-bold leading-tight lg:text-[40px]">Create your own #SuiFest2025 Card</h2>
+    <div className="h-full w-full max-w-[652px] rounded-[32px] border border-white/10 bg-[#4B4B4B33] p-8 lg:rounded-[64px]">
+      <h2 className="text-2xl leading-tight lg:text-[40px]">Create your own #SuiFest2025 Card</h2>
 
       <div className="mt-12">
         <div>
@@ -97,7 +97,7 @@ export function CardControlPanel(props: CardControlPanelProps) {
 
         <div className="pt-12">
           <p className="text-base font-medium text-white lg:text-2xl">Card templates</p>
-          <div className="flex justify-between pt-8">
+          <div className="flex space-x-6 pt-8">
             {templates.map((t) => (
               <button
                 key={t.key}
@@ -115,7 +115,7 @@ export function CardControlPanel(props: CardControlPanelProps) {
           </div>
         </div>
 
-        <div className="pt-13 flex justify-end">
+        <div className="flex justify-end pt-12">
           <button
             onClick={onGenerate}
             className="h-12 w-full rounded-2xl bg-white px-6 text-xl text-black md:w-auto lg:text-xl"
