@@ -13,14 +13,8 @@
 import { Route as rootRoute } from './routes/__root';
 import { Route as IndexImport } from './routes/index';
 import { Route as PreviewImport } from './routes/preview';
-import { Route as TestImport } from './routes/test';
 
 // Create/Update Routes
-
-const TestRoute = TestImport.update({
-  path: '/test',
-  getParentRoute: () => rootRoute,
-} as any);
 
 const PreviewRoute = PreviewImport.update({
   path: '/preview',
@@ -50,23 +44,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreviewImport;
       parentRoute: typeof rootRoute;
     };
-    '/test': {
-      id: '/test';
-      path: '/test';
-      fullPath: '/test';
-      preLoaderRoute: typeof TestImport;
-      parentRoute: typeof rootRoute;
-    };
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  IndexRoute,
-  PreviewRoute,
-  TestRoute,
-});
+export const routeTree = rootRoute.addChildren({ IndexRoute, PreviewRoute });
 
 /* prettier-ignore-end */
 
@@ -77,8 +60,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/preview",
-        "/test"
+        "/preview"
       ]
     },
     "/": {
@@ -86,9 +68,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/preview": {
       "filePath": "preview.tsx"
-    },
-    "/test": {
-      "filePath": "test.tsx"
     }
   }
 }

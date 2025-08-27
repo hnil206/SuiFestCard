@@ -4,12 +4,12 @@ import React from 'react';
 
 import { Input } from './Input';
 
-export type TemplateKey = 'one' | 'two' | 'three';
+export type TemplateKey = 'bg1' | 'bg2' | 'bg3';
 
 const templates: { key: TemplateKey; image: string }[] = [
-  { key: 'one', image: '/teamplate/template1.png' },
-  { key: 'two', image: '/teamplate/template2.png' },
-  { key: 'three', image: '/teamplate/template3.png' },
+  { key: 'bg1', image: '/teamplate/template1.png' },
+  { key: 'bg2', image: '/teamplate/template2.png' },
+  { key: 'bg3', image: '/teamplate/template3.png' },
 ];
 
 interface CardControlPanelProps {
@@ -47,14 +47,14 @@ export function CardControlPanel(props: CardControlPanelProps) {
   };
 
   return (
-    <div className="h-full w-full max-w-[484px] rounded-[32px] border border-white/10 bg-[#4B4B4B33] p-8 lg:rounded-[64px]">
-      <h2 className="text-2xl font-bold leading-tight lg:text-[40px]">Create your own #SuiFest2025 Card</h2>
+    <div className="h-full w-full rounded-[32px] border border-white/10 bg-[#4B4B4B33] p-8 lg:rounded-[64px]">
+      <h2 className="text-2xl leading-tight lg:text-[40px]">Create your own #SuiFest2025 Card</h2>
 
       <div className="mt-12">
         <div>
           <p className="mb-8 text-base font-medium text-white lg:text-xl">Display information</p>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="lg:space-y-2">
               <Input
                 id="full-name"
                 label="Full Name"
@@ -64,7 +64,7 @@ export function CardControlPanel(props: CardControlPanelProps) {
                 onChange={(e) => onFullNameChange(e.target.value)}
               />
             </div>
-            <div className="space-y-2">
+            <div className="lg:space-y-2">
               <Input
                 id="handle"
                 label="X handle"
@@ -97,7 +97,7 @@ export function CardControlPanel(props: CardControlPanelProps) {
 
         <div className="pt-12">
           <p className="text-base font-medium text-white lg:text-2xl">Card templates</p>
-          <div className="flex justify-between pt-8">
+          <div className="flex space-x-6 pt-8">
             {templates.map((t) => (
               <button
                 key={t.key}
@@ -115,7 +115,7 @@ export function CardControlPanel(props: CardControlPanelProps) {
           </div>
         </div>
 
-        <div className="pt-13 flex justify-end">
+        <div className="flex justify-end pt-12">
           <button
             onClick={onGenerate}
             className="h-12 w-full rounded-2xl bg-white px-6 text-xl text-black md:w-auto lg:text-xl"

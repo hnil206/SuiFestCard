@@ -1,24 +1,23 @@
 'use client';
 
-import { useContext, useRef, useState } from 'react';
+import { useRef } from 'react';
 import html2canvas from 'html2canvas';
 
 import AvailableCard from '@/components/AvailableCard';
-import { TemplateKey } from '@/components/CardControlPanel';
 import { CardPreview } from '@/components/CardPreview';
 
-import CardContext from '../../store/card-providers';
+import { useCardStore } from '../../store/cardStore';
 
 const PreviewPage = () => {
-  const context = useContext(CardContext);
-  const { state } = context;
+  const { state } = useCardStore();
   const captureRef = useRef<HTMLDivElement>(null);
-  const [template] = useState<TemplateKey>('one');
-
+  console.log('PreviewPage state:', state); // Debug log
   const handleCapture = async () => {
     if (captureRef.current) {
       const canvas = await html2canvas(captureRef.current);
+      console.log('Canvas generated:', canvas);
       const dataUrl = canvas.toDataURL('image/png');
+      console.log('Data URL:', dataUrl);
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       const file = new File([blob], 'suifest-card.png', { type: 'image/png' });
@@ -39,7 +38,7 @@ const PreviewPage = () => {
               name={state.name}
               username={state.username.startsWith('@') ? state.username.slice(1) : state.username}
               avatarUrl={state.image}
-              template={template}
+              template={state.template}
               textSize="3xl"
               imageSize="60px"
               textClassName="text-[8px] sm:text-[8px] md:text-[8px] lg:text-3xl"

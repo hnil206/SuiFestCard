@@ -6,7 +6,7 @@ interface CardProps {
   name: string;
   username: string;
   avatarUrl?: string | null;
-  template?: 'one' | 'two' | 'three';
+  template?: 'bg1' | 'bg2' | 'bg3';
   className?: React.HTMLAttributes<HTMLDivElement>['className'];
   textSize?: string;
   imageSize?: string;
@@ -16,9 +16,9 @@ interface CardProps {
 }
 
 const TEMPLATE_BG: Record<NonNullable<CardProps['template']>, string> = {
-  one: '/teamplate/template1.png',
-  two: '/teamplate/template2.png',
-  three: '/teamplate/template3.png',
+  bg1: '/teamplate/template1.png',
+  bg2: '/teamplate/template2.png',
+  bg3: '/teamplate/template3.png',
 };
 
 export const CardPreview = ({
@@ -26,7 +26,7 @@ export const CardPreview = ({
   username,
   avatarUrl,
   className,
-  template = 'one',
+  template = 'bg1',
   textSize,
   imageSize,
   textClassName,
@@ -39,48 +39,40 @@ export const CardPreview = ({
 
   return (
     <div
-      className={`relative flex flex-col justify-between overflow-hidden text-white ${className || ''}`}
+      className={`relative flex h-full w-full flex-col overflow-hidden text-white ${className || ''}`}
       style={{
         backgroundImage: `url(${bg})`,
-        backgroundSize: 'cover',
+        backgroundSize: '100% 100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="p-3 lg:p-8">
-        <p
-          className={`text-base font-medium leading-tight tracking-[-0.02em] md:text-2xl lg:text-${textSize} ${textClassName || ''}`}
-        >
-          I'm going to
-        </p>
-        <p
-          className={`text-base font-medium leading-tight tracking-[-0.02em] md:text-2xl lg:text-${textSize} ${textClassName || ''}`}
-        >
-          Sui Fest
-        </p>
+      <div className="p-3 lg:mr-9 lg:p-8">
+        <p className={`font-medium leading-tight lg:text-${textSize} ${textClassName || ''}`}>Speaker</p>
       </div>
-      <div className="flex items-center justify-center lg:px-8 lg:py-2">
+      <div className="flex flex-1 items-center justify-center">
         <div>
           <div
-            className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[400px] lg:w-[400px] ${imageClassName || ''}`}
+            className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
           >
             {displayAvatar ? (
-              <img src={avatarUrl} alt="Profile" />
+              <img src={avatarUrl} alt="Profile" className="h-full w-full" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-orange-400">
-                <img src="/logo-sui.png" alt="Sui Logo" className="object-contain p-2" />
+              <div className="flex h-full w-full items-center justify-center">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzbYTyntexjeYwbQP1GHJ2KwQAg_zZHmuecQ&s"
+                  alt="Sui Logo"
+                  className="h-full w-full p-2"
+                />
               </div>
             )}
           </div>
           <div
-            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[8px] lg:px-2 lg:py-1 lg:text-lg`}
+            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[8px] text-base lg:px-2 lg:py-1 lg:text-lg`}
           >
             @{username}
           </div>
         </div>
-      </div>
-      <div
-        className={`flex justify-end px-3 pt-2 text-base font-medium lg:p-6 lg:text-${textSize} ${textClassName || ''}`}
-      >
-        sui.io/suifest
       </div>
     </div>
   );
