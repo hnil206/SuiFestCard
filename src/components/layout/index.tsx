@@ -1,7 +1,20 @@
-import React, { PropsWithChildren } from 'react';
+import React, { ReactNode } from 'react';
 
-const Layout = ({ children }: PropsWithChildren) => {
-  return <div className="min-h-screen bg-black">{children}</div>;
+import Footer from './Footer';
+import Header from './Header';
+
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="container mx-auto flex-grow p-4">{children}</main>
+      <Footer />
+    </div>
+  );
 };
 
 export default Layout;
