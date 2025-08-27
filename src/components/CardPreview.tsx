@@ -16,9 +16,9 @@ interface CardProps {
 }
 
 const TEMPLATE_BG: Record<NonNullable<CardProps['template']>, string> = {
-  bg1: '/teamplate/template1.png',
-  bg2: '/teamplate/template2.png',
-  bg3: '/teamplate/template3.png',
+  bg1: '/teamplate/card/bg1.png',
+  bg2: '/teamplate/card/bg2.png',
+  bg3: '/teamplate/card/bg3.png',
 };
 
 export const CardPreview = ({
@@ -27,9 +27,7 @@ export const CardPreview = ({
   avatarUrl,
   className,
   template = 'bg1',
-  textSize,
   imageSize,
-  textClassName,
   imageClassName,
 }: CardProps) => {
   const bg = TEMPLATE_BG[template];
@@ -40,17 +38,15 @@ export const CardPreview = ({
   return (
     <div
       className={`relative flex h-full w-full flex-col overflow-hidden text-white ${className || ''}`}
-      style={{
-        backgroundImage: `url(${bg})`,
-        backgroundSize: '100% 100%',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
+      // style={{
+      //   backgroundImage: `url(${bg})`,
+      //   backgroundSize: 'contain',
+      //   backgroundPosition: 'center',
+      //   backgroundRepeat: 'no-repeat',
+      // }}
     >
-      <div className="px-3 pt-3 lg:mr-9 lg:px-8 lg:pt-8">
-        <p className={`font-medium leading-tight lg:text-${textSize} ${textClassName || ''}`}>Speaker</p>
-      </div>
-      <div className="flex flex-1 items-center justify-center">
+      <img src={bg} alt="Background" className="absolute inset-0 z-0 h-full w-full object-fill" />
+      <div className="relative z-10 flex flex-1 items-center justify-center">
         <div>
           <div
             className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
@@ -59,11 +55,7 @@ export const CardPreview = ({
               <img src={avatarUrl} alt="Profile" className="h-full w-full" />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzbYTyntexjeYwbQP1GHJ2KwQAg_zZHmuecQ&s"
-                  alt="Sui Logo"
-                  className="h-full w-full p-2"
-                />
+                <img src="/example.png" alt="Sui Logo" className="h-full w-full" />
               </div>
             )}
           </div>
