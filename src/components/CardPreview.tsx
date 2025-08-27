@@ -52,7 +52,7 @@ export const CardPreview = ({
             className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-black text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
           >
             <img
-              src={displayAvatar ? avatarUrl : '/example.png'}
+              src={displayAvatar ? avatarUrl : 'https://placehold.co/400x400'}
               alt={displayAvatar ? 'Profile' : 'Sui Logo'}
               className="h-full w-full object-cover"
             />
