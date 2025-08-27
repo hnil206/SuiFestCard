@@ -30,19 +30,19 @@ const PreviewPage = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-199px)] flex-col items-center justify-center">
-      <div className="mx-auto w-full min-w-[320px] max-w-[916px] bg-black px-5 text-white lg:px-0">
+      <div className="mx-auto w-full min-w-[320px] max-w-[685px] bg-black text-white lg:px-0">
         <div className="flex w-full justify-center">
-          <div className="flex w-full rounded-r-[32px]" ref={captureRef}>
+          <div className="flex w-full rounded-r-[32px] lg:min-h-[515px]" ref={captureRef}>
             <CardPreview
-              className="w-full"
+              className="w-full rounded-l-[32px]"
               name={state.name}
               username={state.username.startsWith('@') ? state.username.slice(1) : state.username}
               avatarUrl={state.image}
               template={state.template}
-              textSize="3xl"
-              imageSize="60px"
-              textClassName="text-[8px] sm:text-[8px] md:text-[8px] lg:text-3xl"
-              imageClassName="h-[60px] w-[60px] sm:h-[60px] sm:w-[60px] md:h-[60px] md:w-[60px] lg:!h-[250px] lg:!w-[250px]"
+              textSize="6xl"
+              imageSize="120px"
+              textClassName="text-2xl lg:text-6xl md:text-5xl"
+              imageClassName="h-[120px] w-[120px] md:h-[200px] md:w-[200px] lg:!h-[250px] lg:!w-[250px]"
             />
             <AvailableCard />
           </div>

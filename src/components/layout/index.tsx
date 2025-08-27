@@ -1,7 +1,9 @@
-import React, { PropsWithChildren } from 'react';
-
-const Layout = ({ children }: PropsWithChildren) => {
-  return <div className="min-h-screen bg-black">{children}</div>;
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="flex min-h-screen flex-col bg-black">
+      <main className="container mx-auto flex-grow p-4">{children}</main>
+    </div>
+  );
 };
 
 export default Layout;

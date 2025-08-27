@@ -47,7 +47,7 @@ export const CardPreview = ({
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="p-3 lg:mr-9 lg:p-8">
+      <div className="px-3 pt-3 lg:mr-9 lg:px-8 lg:pt-8">
         <p className={`font-medium leading-tight lg:text-${textSize} ${textClassName || ''}`}>Speaker</p>
       </div>
       <div className="flex flex-1 items-center justify-center">
@@ -68,7 +68,7 @@ export const CardPreview = ({
             )}
           </div>
           <div
-            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[8px] text-base lg:px-2 lg:py-1 lg:text-lg`}
+            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[8px] lg:px-2 lg:py-1 lg:text-lg`}
           >
             @{username}
           </div>

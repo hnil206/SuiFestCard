@@ -26,9 +26,9 @@ const Home = () => {
       <div className="flex min-h-0 items-center">
         <div className="h-full w-full items-center px-6 py-12 text-white">
           <div className="mx-auto max-w-[1200px]">
-            <div className="flex flex-col gap-10 lg:flex-row">
+            <div className="flex flex-col gap-10 md:flex-row lg:flex-row">
               {/* Preview */}
-              <div className="flex items-start justify-center md:justify-center">
+              <div className="flex items-start justify-center lg:justify-start">
                 <CardPreview
                   name={fullName}
                   username={handle}
@@ -41,7 +41,6 @@ const Home = () => {
                   className="h-[495px] w-full rounded-[32px] border-[16px] border-[#1f1f1f] text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] lg:h-full lg:rounded-[64px]"
                 />
               </div>
-              {/* <div className='w-full h-full max-w-[784px]'> */}
               {/* Control Panel */}
               <CardControlPanel
                 fullName={fullName}
