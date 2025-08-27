@@ -6,7 +6,7 @@ interface CardProps {
   name: string;
   username: string;
   avatarUrl?: string | null;
-  template?: 'one' | 'two' | 'three';
+  template?: 'bg1' | 'bg2' | 'bg3';
   className?: React.HTMLAttributes<HTMLDivElement>['className'];
   textSize?: string;
   imageSize?: string;
@@ -16,9 +16,9 @@ interface CardProps {
 }
 
 const TEMPLATE_BG: Record<NonNullable<CardProps['template']>, string> = {
-  one: '/teamplate/template1.png',
-  two: '/teamplate/template2.png',
-  three: '/teamplate/template3.png',
+  bg1: '/teamplate/template1.png',
+  bg2: '/teamplate/template2.png',
+  bg3: '/teamplate/template3.png',
 };
 
 export const CardPreview = ({
@@ -26,7 +26,7 @@ export const CardPreview = ({
   username,
   avatarUrl,
   className,
-  template = 'one',
+  template = 'bg1',
   textSize,
   imageSize,
   textClassName,

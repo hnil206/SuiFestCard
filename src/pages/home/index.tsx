@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { CardContext } from '@/store/card-providers';
+import { useState } from 'react';
+import { useCardStore } from '@/store/cardStore';
 import { useNavigate } from '@tanstack/react-router';
 
 import { CardControlPanel, TemplateKey } from '@/components/CardControlPanel';
@@ -9,14 +9,17 @@ const Home = () => {
   const [fullName, setFullName] = useState('');
   const [handle, setHandle] = useState('');
   const [avatar, setAvatar] = useState<string | null>(null);
-  const [template, setTemplate] = useState<TemplateKey>('one');
-  const context = useContext(CardContext);
-  const { setState } = context;
+  const [template, setTemplate] = useState<TemplateKey>('bg1');
+  const { setState } = useCardStore();
   const navigate = useNavigate();
   const handleGenerate = () => {
-    setState({ image: avatar || '', name: fullName, username: handle, template });
-    navigate({ to: '/preview' }); // or whatever route you want to navigate to
-    console.log('Generating card with:', { fullName, handle, avatar, template });
+    setState({
+      image: avatar || '',
+      name: fullName,
+      username: handle,
+      template: template,
+    });
+    navigate({ to: '/preview' });
   };
   return (
     <div>

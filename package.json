@@ -20,13 +20,16 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@tanstack/react-query": "^5.45.0",
     "@tanstack/react-router": "^1.36.3",
+    "auto-zustand-selectors-hook": "^3.0.1",
     "axios": "^1.7.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.0",
     "html2canvas": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-query-kit": "^3.3.0"
+    "react-query-kit": "^3.3.0",
+    "react-router-dom": "6.30.1",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
