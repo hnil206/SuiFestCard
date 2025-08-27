@@ -1,14 +1,15 @@
-import { TwitterClientId, TwitterRedirectUri } from '@/utils/constant';
+import { AuthServerUrl } from '@/utils/constant';
 
-export default function getAuthUrl() {
-  const params = new URLSearchParams({
-    response_type: 'code',
-    client_id: TwitterClientId,
-    redirect_uri: TwitterRedirectUri,
-    scope: 'tweet.write tweet.read users.read media.write offline.access',
-    state: 'state',
-    code_challenge: 'challenge',
-    code_challenge_method: 'plain',
-  });
-  return `https://x.com/i/oauth2/authorize?${params.toString()}`;
+export default async function getAuthUrl(): Promise<string> {
+  try {
+    const response = await fetch(`${AuthServerUrl}/auth/twitter`);
+    if (!response.ok) {
+      throw new Error('Failed to get auth URL');
+    }
+    const data = (await response.json()) as { authUrl: string };
+    return data.authUrl;
+  } catch (error) {
+    console.error('Error getting auth URL:', error);
+    throw error;
+  }
 }

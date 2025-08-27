@@ -1,8 +1,8 @@
-import { TwitterApiBaseUrl } from '@/utils/constant';
+import { AuthServerUrl } from '@/utils/constant';
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: TwitterApiBaseUrl,
+  baseURL: AuthServerUrl,
   headers: {
     'Content-Type': 'application/json',
   },

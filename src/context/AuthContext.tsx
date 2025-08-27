@@ -9,17 +9,49 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session on mount
-    const storedUser = sessionStorage.getItem('user');
-    if (storedUser) {
+    // Check for OAuth callback
+    const urlParams = new URLSearchParams(window.location.search);
+    const auth = urlParams.get('auth');
+    const userParam = urlParams.get('user');
+
+    if (auth === 'success' && userParam) {
       try {
-        const parsedUser = JSON.parse(storedUser) as User;
-        setUser(parsedUser);
+        const userData = JSON.parse(atob(userParam)) as User;
+        setUser(userData);
+        sessionStorage.setItem('user', JSON.stringify(userData));
+
+        // Clean up URL
+        const url = new URL(window.location.href);
+        url.searchParams.delete('auth');
+        url.searchParams.delete('user');
+        window.history.replaceState({}, document.title, url.toString());
       } catch (error) {
-        console.error('Failed to parse user data from sessionStorage', error);
-        sessionStorage.removeItem('user');
+        console.error('Failed to parse user data from callback', error);
+      }
+    } else if (auth === 'error') {
+      const message = urlParams.get('message') || 'Authentication failed';
+      console.error('Auth error:', message);
+      alert(`Login failed: ${message}`);
+
+      // Clean up URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete('auth');
+      url.searchParams.delete('message');
+      window.history.replaceState({}, document.title, url.toString());
+    } else {
+      // Check for existing session on mount
+      const storedUser = sessionStorage.getItem('user');
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser) as User;
+          setUser(parsedUser);
+        } catch (error) {
+          console.error('Failed to parse user data from sessionStorage', error);
+          sessionStorage.removeItem('user');
+        }
       }
     }
+
     setIsLoading(false);
   }, []);
 

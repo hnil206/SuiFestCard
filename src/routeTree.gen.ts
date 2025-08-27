@@ -12,12 +12,24 @@
 
 import { Route as rootRoute } from './routes/__root';
 import { Route as IndexImport } from './routes/index';
+import { Route as LoginImport } from './routes/login';
+import { Route as LogoutImport } from './routes/logout';
 import { Route as PreviewImport } from './routes/preview';
 
 // Create/Update Routes
 
 const PreviewRoute = PreviewImport.update({
   path: '/preview',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const LogoutRoute = LogoutImport.update({
+  path: '/logout',
+  getParentRoute: () => rootRoute,
+} as any);
+
+const LoginRoute = LoginImport.update({
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any);
 
@@ -37,6 +49,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
+    '/login': {
+      id: '/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof rootRoute;
+    };
+    '/logout': {
+      id: '/logout';
+      path: '/logout';
+      fullPath: '/logout';
+      preLoaderRoute: typeof LogoutImport;
+      parentRoute: typeof rootRoute;
+    };
     '/preview': {
       id: '/preview';
       path: '/preview';
@@ -49,7 +75,12 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute, PreviewRoute });
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  LoginRoute,
+  LogoutRoute,
+  PreviewRoute,
+});
 
 /* prettier-ignore-end */
 
@@ -60,11 +91,19 @@ export const routeTree = rootRoute.addChildren({ IndexRoute, PreviewRoute });
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/login",
+        "/logout",
         "/preview"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/logout": {
+      "filePath": "logout.tsx"
     },
     "/preview": {
       "filePath": "preview.tsx"
