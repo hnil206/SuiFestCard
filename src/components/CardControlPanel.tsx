@@ -47,7 +47,7 @@ export function CardControlPanel(props: CardControlPanelProps) {
   };
 
   return (
-    <div className="h-full w-full max-w-[652px] rounded-[32px] border border-white/10 bg-[#4B4B4B33] p-8 lg:rounded-[64px]">
+    <div className="h-full w-full rounded-[32px] border border-white/10 bg-[#4B4B4B33] p-8 lg:rounded-[64px]">
       <h2 className="text-2xl leading-tight lg:text-[40px]">Create your own #SuiFest2025 Card</h2>
 
       <div className="mt-12">

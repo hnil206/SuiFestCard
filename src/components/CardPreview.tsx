@@ -48,7 +48,7 @@ export const CardPreview = ({
       <div className="p-3 lg:mr-9 lg:p-8">
         <p className={`font-medium leading-tight lg:text-${textSize} ${textClassName || ''}`}>Speaker</p>
       </div>
-      <div className="flex justify-center pt-10 lg:px-8 lg:pt-24">
+      <div className="flex justify-center pb-6 pt-8 lg:px-8 lg:pt-24">
         <div>
           <div
             className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
