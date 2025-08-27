@@ -68,7 +68,7 @@ export const CardPreview = ({
             )}
           </div>
           <div
-            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[8px] lg:px-2 lg:py-1 lg:text-lg`}
+            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[10px] md:text-base lg:px-2 lg:py-1 lg:text-lg`}
           >
             @{username}
           </div>
