@@ -38,7 +38,7 @@ const Home = () => {
                   imageSize="120px"
                   textClassName="text-5xl"
                   imageClassName="h-[200px] w-[200px] lg:h-[400px] lg:w-[400px]"
-                  className="h-full w-full rounded-[32px] border-[16px] border-[#1f1f1f] text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] lg:rounded-[64px]"
+                  className="h-[495px] w-full rounded-[32px] border-[16px] border-[#1f1f1f] text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] lg:h-full lg:rounded-[64px]"
                 />
               </div>
               {/* <div className='w-full h-full max-w-[784px]'> */}

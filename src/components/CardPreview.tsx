@@ -42,25 +42,27 @@ export const CardPreview = ({
       className={`relative flex h-full w-full flex-col overflow-hidden text-white ${className || ''}`}
       style={{
         backgroundImage: `url(${bg})`,
-        backgroundSize: 'cover',
+        backgroundSize: '100% 100%',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
       <div className="p-3 lg:mr-9 lg:p-8">
         <p className={`font-medium leading-tight lg:text-${textSize} ${textClassName || ''}`}>Speaker</p>
       </div>
-      <div className="flex justify-center pb-6 pt-8 lg:px-8 lg:pt-24">
+      <div className="flex flex-1 items-center justify-center">
         <div>
           <div
             className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-neutral-300 text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
           >
             {displayAvatar ? (
-              <img src={avatarUrl} alt="Profile" />
+              <img src={avatarUrl} alt="Profile" className="h-full w-full" />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
                 <img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzbYTyntexjeYwbQP1GHJ2KwQAg_zZHmuecQ&s"
                   alt="Sui Logo"
-                  className="object-contain p-2"
+                  className="h-full w-full p-2"
                 />
               </div>
             )}
