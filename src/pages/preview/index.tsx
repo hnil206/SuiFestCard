@@ -86,7 +86,7 @@ const PreviewPage = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-199px)] flex-col items-center justify-center">
-      <div className="mx-auto w-full min-w-[320px] max-w-[685px] bg-black px-4 text-white lg:px-0">
+      <div className="mx-auto w-full min-w-[320px] max-w-[980px] bg-black px-4 text-white lg:px-0">
         <div className="flex w-full justify-center">
           <div className="flex w-full overflow-hidden lg:min-h-[515px]" ref={captureRef}>
             <CardPreview
