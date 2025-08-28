@@ -104,10 +104,10 @@ const PreviewPage = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-center px-5 pt-5 text-center text-xl font-bold text-white md:px-8 md:pt-8 lg:px-0 lg:pt-16 lg:text-4xl">
+      <div className="flex items-center justify-center px-5 pt-8 text-center text-xl font-bold text-white md:px-8 md:pt-8 lg:px-0 lg:pt-16 lg:text-4xl">
         <h2>Share your newly generated SuiFest Card</h2>
       </div>
-      <div className="flex w-full flex-col gap-4 px-5 py-6 lg:flex lg:flex-row lg:items-center lg:justify-center lg:gap-5 lg:px-0 lg:py-12">
+      <div className="flex w-full flex-col gap-8 px-5 py-6 lg:flex lg:flex-row lg:items-center lg:justify-center lg:px-0 lg:py-12">
         <button
           className="flex h-12 w-full flex-1 transform items-center justify-center gap-3 rounded-full bg-white px-5 py-4 text-lg font-semibold text-black shadow-lg transition-all duration-75 ease-linear hover:scale-105 hover:bg-gray-100 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 md:w-auto md:flex-none"
           onClick={handleShareOnX}
