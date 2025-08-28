@@ -6,8 +6,15 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', ...fontFamily.sans],
-        serif: ['Inter', ...fontFamily.serif],
+        sans: ['ABCDiatype', ...fontFamily.sans],
+        serif: ['ABCDiatype', ...fontFamily.serif],
+        diatype: ['ABCDiatype', 'sans-serif'],
+      },
+      fontWeight: {
+        thin: '100',
+        light: '300',
+        normal: '400',
+        medium: '500',
       },
     },
   },

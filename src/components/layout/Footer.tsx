@@ -1,8 +1,8 @@
 export default function Footer() {
   return (
     <footer className="relative w-full">
-      <img src="/footer.svg" alt="footer" className="w-full" />
-      <div className="absolute bottom-0 w-full border-t border-white/10 px-5 py-6 text-white lg:px-28 lg:py-9">
+      <img src="/footer.svg" alt="footer" className="absolute bottom-0 left-0 z-0 w-full" />
+      <div className="relative z-10 min-h-24 w-full border-t border-white/10 px-5 py-6 text-white lg:px-28 lg:py-9">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="text-center text-xl md:text-left lg:text-2xl">SuiFest Card Generator App</div>
           <div className="flex items-center justify-center text-lg lg:text-2xl">

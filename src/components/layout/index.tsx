@@ -9,9 +9,9 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="flex min-h-screen flex-col bg-black text-white">
+    <div className="flex min-h-screen flex-col bg-black font-diatype text-white">
       <Header />
-      <main className="container mx-auto flex-grow">{children}</main>
+      <main className="container relative z-10 mx-auto flex-grow">{children}</main>
       <Footer />
     </div>
   );

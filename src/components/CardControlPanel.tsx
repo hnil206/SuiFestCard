@@ -28,7 +28,7 @@ export function CardControlPanel(props: CardControlPanelProps) {
   const {
     fullName,
     handle,
-    // avatar,
+    avatar,
     template,
     onFullNameChange,
     onHandleChange,
@@ -90,6 +90,23 @@ export function CardControlPanel(props: CardControlPanelProps) {
               }}
             />
           </div>
+
+          {/* Avatar preview */}
+          {avatar && (
+            <div className="mt-4 flex items-center gap-3">
+              <div className="relative">
+                <img
+                  src={avatar}
+                  alt="Profile preview"
+                  className="h-16 w-16 rounded-full border-2 border-white/20 object-cover"
+                />
+              </div>
+              <div className="text-sm text-white/70">
+                {avatar.startsWith('http') ? 'Twitter profile loaded' : 'Custom image uploaded'}
+              </div>
+            </div>
+          )}
+
           <div className="cursor-pointer text-sm text-[#226DCF]" onClick={() => onAvatarChange(null)}>
             <p className="px-4 pt-2">Remove uploaded photo</p>
           </div>

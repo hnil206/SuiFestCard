@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { AuthServerUrl } from '@/utils/constant';
 import html2canvas from 'html2canvas';
 
 import AvailableCard from '@/components/AvailableCard';
@@ -11,6 +12,7 @@ import { useCardStore } from '../../store/cardStore';
 const PreviewPage = () => {
   const { state } = useCardStore();
   const captureRef = useRef<HTMLDivElement>(null);
+  const [isSharing, setIsSharing] = useState(false);
   console.log('PreviewPage state:', state); // Debug log
 
   //download image
@@ -44,6 +46,45 @@ const PreviewPage = () => {
     return null;
   };
 
+  const handleShareOnX = async () => {
+    setIsSharing(true);
+    try {
+      const file = await handleCapture();
+      if (!file) {
+        throw new Error('Failed to capture image');
+      }
+
+      // Create FormData for upload
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Upload image to server
+      const uploadResponse = await fetch(`${AuthServerUrl}/api/upload-image`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const responseData = (await uploadResponse.json()) as { success: boolean; shareUrl: string; imageId: string };
+      const { shareUrl } = responseData;
+
+      // Create share text
+      const shareText = `Check out my SuiFest 2025 card! 🎉 Create yours at ${window.location.origin}`;
+
+      // Open Twitter share intent with the server's share URL
+      const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+      window.open(twitterShareUrl, '_blank', 'width=600,height=400');
+    } catch (error) {
+      console.error('Error sharing on X:', error);
+      alert('Failed to share on X. Please try again.');
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   return (
     <div className="flex min-h-[calc(100vh-199px)] flex-col items-center justify-center">
       <div className="mx-auto w-full min-w-[320px] max-w-[685px] bg-black px-4 text-white lg:px-0">
@@ -68,11 +109,21 @@ const PreviewPage = () => {
       </div>
       <div className="flex w-full flex-col gap-4 px-5 py-6 lg:flex lg:flex-row lg:items-center lg:justify-center lg:gap-5 lg:px-0 lg:py-12">
         <button
-          className="flex h-12 w-full flex-1 transform items-center justify-center gap-3 rounded-full bg-white px-5 py-4 text-lg font-semibold text-black shadow-lg transition-all duration-75 ease-linear hover:scale-105 hover:bg-gray-100 hover:shadow-xl md:w-auto md:flex-none"
-          onClick={handleCapture}
+          className="flex h-12 w-full flex-1 transform items-center justify-center gap-3 rounded-full bg-white px-5 py-4 text-lg font-semibold text-black shadow-lg transition-all duration-75 ease-linear hover:scale-105 hover:bg-gray-100 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 md:w-auto md:flex-none"
+          onClick={handleShareOnX}
+          disabled={isSharing}
         >
-          Share on
-          <img src="/xlogo.png" alt="" className="h-5 w-5" />
+          {isSharing ? (
+            <>
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent"></div>
+              Sharing...
+            </>
+          ) : (
+            <>
+              Share on
+              <img src="/xlogo.png" alt="" className="h-5 w-5" />
+            </>
+          )}
         </button>
         <button
           onClick={handleDownload}

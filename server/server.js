@@ -1,12 +1,33 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import multer from 'multer';
 import { TwitterApi } from 'twitter-api-v2';
+import { v4 as uuidv4 } from 'uuid';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Configure multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  },
+});
+
+// In-memory storage for uploaded images (in production, use cloud storage like AWS S3)
+const uploadedImages = new Map();
 
 // Middleware
 const allowedOrigins = [
@@ -59,6 +80,172 @@ const oauthStates = new Map();
 // Routes
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Twitter OAuth server is running' });
+});
+
+// Upload image for sharing
+app.post('/api/upload-image', upload.single('image'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No image file provided' });
+    }
+
+    const imageId = uuidv4();
+    const imageData = {
+      buffer: req.file.buffer,
+      mimetype: req.file.mimetype,
+      originalname: req.file.originalname,
+      timestamp: Date.now(),
+    };
+
+    uploadedImages.set(imageId, imageData);
+
+    // Clean up old images (older than 24 hours)
+    const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
+    for (const [key, value] of uploadedImages.entries()) {
+      if (value.timestamp < twentyFourHoursAgo) {
+        uploadedImages.delete(key);
+      }
+    }
+
+    // Return server's share URL instead of frontend URL
+    const shareUrl = `${req.protocol}://${req.get('host')}/share/${imageId}`;
+
+    res.json({
+      success: true,
+      shareUrl,
+      imageId,
+    });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({ error: 'Failed to upload image' });
+  }
+});
+
+// Serve uploaded image
+app.get('/api/image/:imageId', (req, res) => {
+  try {
+    const { imageId } = req.params;
+    const imageData = uploadedImages.get(imageId);
+
+    if (!imageData) {
+      return res.status(404).json({ error: 'Image not found' });
+    }
+
+    res.set('Content-Type', imageData.mimetype);
+    res.set('Cache-Control', 'public, max-age=86400'); // Cache for 24 hours
+    res.send(imageData.buffer);
+  } catch (error) {
+    console.error('Error serving image:', error);
+    res.status(500).json({ error: 'Failed to serve image' });
+  }
+});
+
+// Serve share page with proper meta tags for Twitter crawler
+app.get('/share/:imageId', (req, res) => {
+  try {
+    const { imageId } = req.params;
+    const imageData = uploadedImages.get(imageId);
+
+    if (!imageData) {
+      return res.status(404).send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Image Not Found</title>
+        </head>
+        <body>
+          <h1>Image Not Found</h1>
+          <p>The requested image could not be found.</p>
+        </body>
+        </html>
+      `);
+    }
+
+    const imageUrl = `${req.protocol}://${req.get('host')}/api/image/${imageId}`;
+    const shareUrl = `${req.protocol}://${req.get('host')}/share/${imageId}`;
+
+    const html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SuiFest</title>
+        <meta name="description" content="Check out this amazing SuiFest! Create your own and join the community.">
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="${shareUrl}">
+        <meta property="og:title" content="SuiFest Card">
+        <meta property="og:description" content="Check out this amazing SuiFest Card! Create your own and join the community.">
+        <meta property="og:image" content="${imageUrl}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="${shareUrl}">
+        <meta name="twitter:title" content="SuiFest">
+        <meta name="twitter:description" content="Check out this amazing SuiFest! Create your own and join the community.">
+        <meta name="twitter:image" content="${imageUrl}">
+        
+        <style>
+          body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+          }
+          .container {
+            text-align: center;
+            max-width: 500px;
+            padding: 20px;
+          }
+          .card-image {
+            max-width: 100%;
+            border-radius: 16px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(255,255,255,0.1);
+          }
+          .cta-button {
+            display: inline-block;
+            background: #fff;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background 0.2s;
+          }
+          .cta-button:hover {
+            background: #f0f0f0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>SuiFest</h1>
+          <img src="${imageUrl}" alt="SuiFest" class="card-image">
+          <p>Create your own SuiFest and join the community!</p>
+          <a href="${process.env.FRONTEND_URL}" class="cta-button">Create Your Card</a>
+        </div>
+      </body>
+      </html>
+    `;
+
+    res.set('Content-Type', 'text/html');
+    res.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
+    res.send(html);
+  } catch (error) {
+    console.error('Error serving share page:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 // Start Twitter OAuth flow
