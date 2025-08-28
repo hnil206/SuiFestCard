@@ -243,6 +243,8 @@ app.get('/share/:imageId', async (req, res) => {
         <meta property="og:image:alt" content="SuiFest Card">
         
         <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:image" content="${directImageUrl}">
         <meta name="twitter:image:src" content="${directImageUrl}">
         <meta name="twitter:title" content="SuiFest Card">
         <meta name="twitter:description" content="Check out this amazing SuiFest Card! Create your own and join the community.">
