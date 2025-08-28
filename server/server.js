@@ -1,3 +1,4 @@
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
@@ -9,6 +10,18 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Configure S3 client for Supabase
+const s3Client = new S3Client({
+  endpoint: process.env.S3_ENDPOINT,
+  region: process.env.S3_REGION,
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  },
+  forcePathStyle: true, // Required for Supabase
+  signatureVersion: 'v4', // Ensure correct signature version
+});
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -26,8 +39,8 @@ const upload = multer({
   },
 });
 
-// In-memory storage for uploaded images (in production, use cloud storage like AWS S3)
-const uploadedImages = new Map();
+// S3 bucket configuration
+const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME || 'suifest-uploads';
 
 // Middleware
 const allowedOrigins = [
@@ -83,29 +96,26 @@ app.get('/health', (req, res) => {
 });
 
 // Upload image for sharing
-app.post('/api/upload-image', upload.single('image'), (req, res) => {
+app.post('/api/upload-image', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No image file provided' });
     }
 
     const imageId = uuidv4();
-    const imageData = {
-      buffer: req.file.buffer,
-      mimetype: req.file.mimetype,
-      originalname: req.file.originalname,
-      timestamp: Date.now(),
-    };
+    const fileExtension = req.file.originalname.split('.').pop() || 'png';
+    const s3Key = `${imageId}.${fileExtension}`; // Remove uploads/ prefix
 
-    uploadedImages.set(imageId, imageData);
+    // Upload to S3
+    const uploadCommand = new PutObjectCommand({
+      Bucket: S3_BUCKET_NAME,
+      Key: s3Key,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+      CacheControl: 'public, max-age=86400', // Cache for 24 hours
+    });
 
-    // Clean up old images (older than 24 hours)
-    const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
-    for (const [key, value] of uploadedImages.entries()) {
-      if (value.timestamp < twentyFourHoursAgo) {
-        uploadedImages.delete(key);
-      }
-    }
+    await s3Client.send(uploadCommand);
 
     // Return server's share URL instead of frontend URL
     const shareUrl = `${req.protocol}://${req.get('host')}/share/${imageId}`;
@@ -114,6 +124,7 @@ app.post('/api/upload-image', upload.single('image'), (req, res) => {
       success: true,
       shareUrl,
       imageId,
+      s3Key, // Include for debugging/reference
     });
   } catch (error) {
     console.error('Error uploading image:', error);
@@ -121,19 +132,41 @@ app.post('/api/upload-image', upload.single('image'), (req, res) => {
   }
 });
 
-// Serve uploaded image
-app.get('/api/image/:imageId', (req, res) => {
+// Serve uploaded image (redirect to S3)
+app.get('/api/image/:imageId', async (req, res) => {
   try {
     const { imageId } = req.params;
-    const imageData = uploadedImages.get(imageId);
 
-    if (!imageData) {
+    // Try common image extensions
+    const extensions = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+    let imageUrl = null;
+
+    for (const ext of extensions) {
+      const s3Key = `${imageId}.${ext}`;
+      try {
+        // Check if the object exists by attempting to get its metadata
+        await s3Client.send(
+          new GetObjectCommand({
+            Bucket: S3_BUCKET_NAME,
+            Key: s3Key,
+          })
+        );
+
+        // If we get here, the object exists
+        imageUrl = `https://${S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`;
+        break;
+      } catch (error) {
+        // Object doesn't exist with this extension, try next
+        continue;
+      }
+    }
+
+    if (!imageUrl) {
       return res.status(404).json({ error: 'Image not found' });
     }
 
-    res.set('Content-Type', imageData.mimetype);
-    res.set('Cache-Control', 'public, max-age=86400'); // Cache for 24 hours
-    res.send(imageData.buffer);
+    // Redirect to S3 URL for better performance
+    res.redirect(302, imageUrl);
   } catch (error) {
     console.error('Error serving image:', error);
     res.status(500).json({ error: 'Failed to serve image' });
@@ -141,12 +174,33 @@ app.get('/api/image/:imageId', (req, res) => {
 });
 
 // Serve share page with proper meta tags for Twitter crawler
-app.get('/share/:imageId', (req, res) => {
+app.get('/share/:imageId', async (req, res) => {
   try {
     const { imageId } = req.params;
-    const imageData = uploadedImages.get(imageId);
 
-    if (!imageData) {
+    // Try to find the image in S3
+    const extensions = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+    let imageExists = false;
+    let imageExtension = 'png';
+
+    for (const ext of extensions) {
+      const s3Key = `${imageId}.${ext}`;
+      try {
+        await s3Client.send(
+          new GetObjectCommand({
+            Bucket: S3_BUCKET_NAME,
+            Key: s3Key,
+          })
+        );
+        imageExists = true;
+        imageExtension = ext;
+        break;
+      } catch (error) {
+        continue;
+      }
+    }
+
+    if (!imageExists) {
       return res.status(404).send(`
         <!DOCTYPE html>
         <html>
@@ -161,7 +215,9 @@ app.get('/share/:imageId', (req, res) => {
       `);
     }
 
-    const imageUrl = `${req.protocol}://${req.get('host')}/api/image/${imageId}`;
+    // Generate direct S3 URL for better X/Twitter compatibility
+    const s3Key = `${imageId}.${imageExtension}`;
+    const directImageUrl = `https://${S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`;
     const shareUrl = `${req.protocol}://${req.get('host')}/share/${imageId}`;
 
     const html = `
@@ -178,16 +234,22 @@ app.get('/share/:imageId', (req, res) => {
         <meta property="og:url" content="${shareUrl}">
         <meta property="og:title" content="SuiFest Card">
         <meta property="og:description" content="Check out this amazing SuiFest Card! Create your own and join the community.">
-        <meta property="og:image" content="${imageUrl}">
+        <meta property="og:image" content="${directImageUrl}">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@suifest">
+        <meta name="twitter:creator" content="@suifest">
         <meta name="twitter:url" content="${shareUrl}">
-        <meta name="twitter:title" content="SuiFest">
-        <meta name="twitter:description" content="Check out this amazing SuiFest! Create your own and join the community.">
-        <meta name="twitter:image" content="${imageUrl}">
+        <meta name="twitter:title" content="SuiFest Card">
+        <meta name="twitter:description" content="Check out this amazing SuiFest Card! Create your own and join the community.">
+        <meta name="twitter:image" content="${directImageUrl}">
+        <meta name="twitter:image:src" content="${directImageUrl}">
+        <meta name="twitter:image:width" content="1200">
+        <meta name="twitter:image:height" content="630">
+        <meta name="twitter:image:alt" content="SuiFest Card">
         
         <style>
           body {
@@ -231,9 +293,8 @@ app.get('/share/:imageId', (req, res) => {
       <body>
         <div class="container">
           <h1>SuiFest</h1>
-          <img src="${imageUrl}" alt="SuiFest" class="card-image">
+          <img src="${directImageUrl}" alt="SuiFest" class="card-image">
           <p>Create your own SuiFest and join the community!</p>
-          <a href="${process.env.FRONTEND_URL}" class="cta-button">Create Your Card</a>
         </div>
       </body>
       </html>
