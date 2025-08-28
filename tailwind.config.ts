@@ -4,6 +4,15 @@ import { fontFamily } from 'tailwindcss/defaultTheme';
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './node_modules/@swiss-digital-assets-institute/ui/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      xxs: '350px',
+      xs: '410px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       fontFamily: {
         sans: ['ABCDiatype', ...fontFamily.sans],
