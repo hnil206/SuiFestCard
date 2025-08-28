@@ -220,10 +220,9 @@ app.get('/share/:imageId', async (req, res) => {
     const directImageUrl = `https://${S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`;
     const shareUrl = `${req.protocol}://${req.get('host')}/share/${imageId}`;
 
-    const html = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>SuiFest Card</title>
@@ -302,9 +301,10 @@ app.get('/share/:imageId', async (req, res) => {
       </html>
     `;
 
-    res.set('Content-Type', 'text/html');
+    res.set('Content-Type', 'text/html; charset=utf-8');
     res.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
-    res.send(html);
+    res.set('X-Content-Type-Options', 'nosniff');
+    res.status(200).send(html);
   } catch (error) {
     console.error('Error serving share page:', error);
     res.status(500).send('Internal Server Error');
