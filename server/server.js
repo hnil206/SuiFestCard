@@ -2,6 +2,7 @@ import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import { engine } from 'express-handlebars';
 import multer from 'multer';
 import { TwitterApi } from 'twitter-api-v2';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,6 +11,17 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Configure Handlebars
+app.engine(
+  'hbs',
+  engine({
+    extname: '.hbs',
+    defaultLayout: false,
+  })
+);
+app.set('view engine', 'hbs');
+app.set('views', './views');
 
 // Configure S3 client for Supabase
 const s3Client = new S3Client({
@@ -220,91 +232,14 @@ app.get('/share/:imageId', async (req, res) => {
     const directImageUrl = `https://${S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`;
     const shareUrl = `${req.protocol}://${req.get('host')}/share/${imageId}`;
 
-    const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>SuiFest Card</title>
-        <meta name="description" content="Check out this amazing SuiFest Card! Create your own and join the community.">
-        
-        <!-- Open Graph / Facebook -->
-        <meta property="og:type" content="article">
-        <meta property="og:url" content="${shareUrl}">
-        <meta property="og:site_name" content="SuiFest">
-        <meta property="og:title" content="SuiFest Card">
-        <meta property="og:description" content="Check out this amazing SuiFest Card! Create your own and join the community.">
-        <meta property="og:image" content="${directImageUrl}">
-        <meta property="og:image:secure_url" content="${directImageUrl}">
-        <meta property="og:image:type" content="image/png">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="SuiFest Card">
-        
-        <!-- Twitter -->
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="${directImageUrl}">
-        <meta name="twitter:image:src" content="${directImageUrl}">
-        <meta name="twitter:title" content="SuiFest Card">
-        <meta name="twitter:description" content="Check out this amazing SuiFest Card! Create your own and join the community.">
-        
-        <!-- Additional Pinterest/Social Media -->
-        <meta property="article:author" content="SuiFest">
-        <link rel="canonical" href="${shareUrl}">
-        
-        <style>
-          body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #000;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-          }
-          .container {
-            text-align: center;
-            max-width: 500px;
-            padding: 20px;
-          }
-          .card-image {
-            max-width: 100%;
-            border-radius: 16px;
-            margin: 20px 0;
-            box-shadow: 0 8px 32px rgba(255,255,255,0.1);
-          }
-          .cta-button {
-            display: inline-block;
-            background: #fff;
-            color: #000;
-            padding: 12px 24px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 20px;
-            transition: background 0.2s;
-          }
-          .cta-button:hover {
-            background: #f0f0f0;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>SuiFest</h1>
-          <img src="${directImageUrl}" alt="SuiFest" class="card-image">
-          <p>Create your own SuiFest and join the community!</p>
-        </div>
-      </body>
-      </html>
-    `;
-
-    res.set('Content-Type', 'text/html; charset=utf-8');
-    res.set('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
-    res.set('X-Content-Type-Options', 'nosniff');
-    res.status(200).send(html);
+    // Use Handlebars template for proper server-side rendering
+    res.set('Cache-Control', 'public, max-age=3600');
+    res.render('share', {
+      title: 'SuiFest Card',
+      description: 'Check out this amazing SuiFest Card! Create your own and join the community.',
+      shareUrl: shareUrl,
+      imageUrl: directImageUrl,
+    });
   } catch (error) {
     console.error('Error serving share page:', error);
     res.status(500).send('Internal Server Error');
