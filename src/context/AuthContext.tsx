@@ -44,6 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (storedUser) {
         try {
           const parsedUser = JSON.parse(storedUser) as User;
+          parsedUser.profileImageUrl = parsedUser.profileImageUrl?.replace('_normal', '');
           setUser(parsedUser);
         } catch (error) {
           console.error('Failed to parse user data from sessionStorage', error);
