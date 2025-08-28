@@ -16,7 +16,7 @@ const AvailableCard = ({ className }: AvailableCardProps) => {
           <br />
           to SuiFest
         </h1>
-        <p className="mb-8 text-sm font-normal lg:text-2xl">sui.io/suifest</p>
+        <p className="mb-3 text-sm font-normal lg:mb-8 lg:text-2xl">sui.io/suifest</p>
       </div>
       {/* Bottom Section */}
       <div>
