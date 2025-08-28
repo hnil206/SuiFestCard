@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex min-h-screen flex-col bg-black font-diatype text-white">
       <Header />
-      <main className="container relative z-10 mx-auto flex-grow">{children}</main>
+      <main className="relative z-10 flex-grow">{children}</main>
       <Footer />
     </div>
   );

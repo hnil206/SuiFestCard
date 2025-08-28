@@ -85,7 +85,7 @@ const Home = () => {
       <div className="flex min-h-0 items-center">
         <div className="h-full w-full items-center px-6 py-12 text-white">
           <div className="mx-auto max-w-[1200px]">
-            <div className="flex flex-col gap-10 md:flex-col lg:flex-row">
+            <div className="flex flex-col gap-10 md:flex-row lg:flex-row">
               {/* Preview */}
               <div className="flex w-full items-start justify-center lg:max-w-[532px] lg:justify-start">
                 <CardPreview

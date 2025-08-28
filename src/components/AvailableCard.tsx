@@ -1,8 +1,14 @@
 import React from 'react';
 
-const AvailableCard = () => {
+interface AvailableCardProps {
+  className?: React.HTMLAttributes<HTMLDivElement>['className'];
+}
+
+const AvailableCard = ({ className }: AvailableCardProps) => {
   return (
-    <div className="flex h-full max-h-[940px] w-full max-w-[600px] flex-col justify-between border border-gray-200 bg-white p-2 text-black shadow-md md:p-8 lg:p-4">
+    <div
+      className={`flex h-full max-h-[940px] w-full max-w-[600px] flex-col justify-between border border-gray-200 bg-white p-2 text-black shadow-md md:p-8 lg:p-4 ${className}`}
+    >
       {/* Top Section */}
       <div>
         <h1 className="text-2xl font-medium leading-tight lg:mb-4 lg:text-5xl">
