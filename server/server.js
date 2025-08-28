@@ -1,3 +1,5 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -6,6 +8,9 @@ import { engine } from 'express-handlebars';
 import multer from 'multer';
 import { TwitterApi } from 'twitter-api-v2';
 import { v4 as uuidv4 } from 'uuid';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -21,7 +26,7 @@ app.engine(
   })
 );
 app.set('view engine', 'hbs');
-app.set('views', './views');
+app.set('views', __dirname + '/views');
 
 // Configure S3 client for Supabase
 const s3Client = new S3Client({
