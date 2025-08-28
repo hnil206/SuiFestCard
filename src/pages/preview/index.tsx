@@ -32,7 +32,9 @@ const PreviewPage = () => {
 
   const handleCapture = async () => {
     if (captureRef.current) {
-      const canvas = await html2canvas(captureRef.current);
+      const canvas = await html2canvas(captureRef.current, {
+        scale: 2,
+      });
       console.log('Canvas generated:', canvas);
       const dataUrl = canvas.toDataURL('image/png');
       console.log('Data URL:', dataUrl);
@@ -71,11 +73,8 @@ const PreviewPage = () => {
       const responseData = (await uploadResponse.json()) as { success: boolean; shareUrl: string; imageId: string };
       const { shareUrl } = responseData;
 
-      // Create share text
-      const shareText = `Check out my SuiFest 2025 card! 🎉 Create yours at ${window.location.origin}`;
-
       // Open Twitter share intent with the server's share URL
-      const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+      const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`;
       window.open(twitterShareUrl, '_blank', 'width=600,height=400');
     } catch (error) {
       console.error('Error sharing on X:', error);
@@ -89,7 +88,7 @@ const PreviewPage = () => {
     <div className="flex min-h-[calc(100vh-199px)] flex-col items-center justify-center">
       <div className="mx-auto w-full min-w-[320px] max-w-[685px] bg-black px-4 text-white lg:px-0">
         <div className="flex w-full justify-center">
-          <div className="flex w-full overflow-hidden rounded-[32px] lg:min-h-[515px]" ref={captureRef}>
+          <div className="flex w-full overflow-hidden lg:min-h-[515px]" ref={captureRef}>
             <CardPreview
               name={state.name}
               username={state.username.startsWith('@') ? state.username.slice(1) : state.username}
