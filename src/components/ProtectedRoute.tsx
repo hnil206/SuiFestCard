@@ -38,18 +38,16 @@ const ProtectedRoute = ({ children, fallback }: ProtectedRouteProps) => {
       fallback || (
         <div className="flex min-h-screen bg-black text-white xxs:flex-col-reverse xxs:items-start xxs:justify-around xs:flex-col-reverse xs:items-start xs:justify-around sm:flex-col-reverse sm:items-start sm:justify-around md:flex-col md:justify-start lg:flex-col lg:justify-start">
           {/* Top section with login */}
-          <div className="flex w-full flex-col items-center justify-center px-5 pb-16 pt-20">
-            <div className="mb-15 w-full max-w-2xl text-center md:pb-16 lg:pb-16">
-              <p className="m-0 text-xl font-normal leading-tight text-white lg:text-[40px]">
-                Log in to create your personalized
-              </p>
-              <p className="m-0 text-xl font-normal leading-tight text-white lg:text-[40px]">#SuiFest2025 Card</p>
+          <div className="flex w-full flex-col items-center justify-center px-5 pb-16 pt-12">
+            <div className="w-full max-w-2xl pb-6 text-center text-xl md:pb-16 lg:pb-16 lg:text-[40px]">
+              <p className="font-normal leading-tight text-white">Log in to create your personalized</p>
+              <p className="m-0 font-normal leading-tight text-white">#SuiFest2025 Card</p>
             </div>
 
             <button
               onClick={handleLogin}
               disabled={isLoginLoading}
-              className={`flex items-center justify-center gap-2.5 rounded-3xl border-0 bg-white px-8 py-4 text-lg font-medium text-black outline-none transition-all duration-200 ease-in-out hover:scale-105 hover:bg-gray-100 ${
+              className={`flex w-full items-center justify-center gap-2.5 rounded-3xl border-0 bg-white py-3 text-lg font-medium text-black outline-none transition-all duration-200 ease-in-out hover:scale-105 hover:bg-gray-100 md:w-auto md:px-8 md:py-4 ${
                 isLoginLoading ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'
               } `}
             >
