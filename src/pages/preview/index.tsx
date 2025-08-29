@@ -86,17 +86,17 @@ const PreviewPage = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-199px)] flex-col items-center justify-center">
-      <div className="mx-auto w-full min-w-[320px] max-w-[980px] bg-black px-4 text-white lg:px-0">
+      <div className="mx-auto w-full min-w-[320px] max-w-[850px] bg-black px-4 text-white lg:px-0">
         <div className="flex w-full justify-center">
-          <div className="flex w-full overflow-hidden lg:min-h-[515px]" ref={captureRef}>
+          <div className="flex min-h-[190px] w-full overflow-hidden md:min-h-[415px] lg:min-h-[480px]" ref={captureRef}>
             <CardPreview
               name={state.name}
               username={state.username.startsWith('@') ? state.username.slice(1) : state.username}
               avatarUrl={state.image}
               template={state.template}
-              textSize="6xl"
+              textSize="7xl"
               imageSize="120px"
-              textClassName="text-2xl lg:text-6xl md:text-5xl"
+              textClassName="text-2xl lg:text-7xl md:text-5xl"
               imageClassName="h-[120px] w-[120px] md:h-[200px] md:w-[200px] lg:!h-[250px] lg:!w-[250px]"
             />
             <AvailableCard />
@@ -126,7 +126,7 @@ const PreviewPage = () => {
         </button>
         <button
           onClick={handleDownload}
-          className="flex h-12 w-full flex-1 transform items-center justify-center gap-3 rounded-full bg-white py-4 text-lg font-semibold text-black shadow-lg transition-all duration-75 ease-linear hover:scale-105 hover:bg-gray-100 hover:shadow-xl md:w-auto md:flex-none lg:px-5"
+          className="flex h-12 w-full flex-1 transform items-center justify-center rounded-full bg-white py-4 text-lg font-semibold text-black shadow-lg transition-all duration-75 ease-linear hover:bg-gray-100 hover:shadow-xl md:w-auto md:flex-none md:hover:scale-105 lg:px-5"
         >
           Download
         </button>
