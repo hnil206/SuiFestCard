@@ -13,6 +13,7 @@ import { useCardStore } from '../../store/cardStore';
 const PreviewPage = () => {
   const { state } = useCardStore();
   const captureRef = useRef<HTMLDivElement>(null);
+  const hiddenCaptureRef = useRef<HTMLDivElement>(null);
   const [isSharing, setIsSharing] = useState(false);
 
   //download image
@@ -31,13 +32,15 @@ const PreviewPage = () => {
   };
 
   const handleCapture = async () => {
-    if (captureRef.current) {
-      const canvas = await html2canvas(captureRef.current, {
+    if (hiddenCaptureRef.current) {
+      const canvas = await html2canvas(hiddenCaptureRef.current, {
         scale: 2,
+        width: 850,
+        height: 480,
+        useCORS: true,
+        backgroundColor: '#000000',
       });
-      console.log('Canvas generated:', canvas);
       const dataUrl = canvas.toDataURL('image/png');
-      console.log('Data URL:', dataUrl);
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       const file = new File([blob], 'suifest-card.png', { type: 'image/png' });
@@ -86,6 +89,29 @@ const PreviewPage = () => {
 
   return (
     <div className="flex min-h-[calc(100vh-199px)] flex-col items-center justify-center">
+      <div
+        ref={hiddenCaptureRef}
+        className="pointer-events-none absolute left-[-9999px] top-[-9999px]"
+        style={{
+          width: 850,
+          height: 480,
+        }}
+      >
+        <div className="flex w-full justify-center">
+          <div className="flex min-h-[480px] w-full overflow-hidden" ref={captureRef}>
+            <CardPreview
+              name={state.name}
+              username={state.username.startsWith('@') ? state.username.slice(1) : state.username}
+              avatarUrl={state.image}
+              template={state.template}
+              responsive={false}
+            />
+            <AvailableCard responsive={false} />
+          </div>
+        </div>
+      </div>
+
+      {/* Visible responsive preview */}
       <div className="mx-auto w-full min-w-[320px] max-w-[850px] bg-black px-4 lg:px-0">
         <div className="flex w-full justify-center">
           <div className="flex min-h-[190px] w-full overflow-hidden md:min-h-[415px] lg:min-h-[480px]" ref={captureRef}>
@@ -97,7 +123,7 @@ const PreviewPage = () => {
               textSize="7xl"
               imageSize="120px"
               textClassName="text-2xl lg:text-7xl md:text-5xl"
-              imageClassName="h-[120px] w-[120px] md:h-[200px] md:w-[200px] lg:h-[250px] lg:w-[250px]"
+              imageClassName="h-[120px] w-[120px] sm:h-[200px] sm:w-[200px]  md:h-[250px] md:w-[250px]"
             />
             <AvailableCard />
           </div>

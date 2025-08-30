@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { cn } from '@/utils/cn';
 
 interface CardProps {
   name: string;
@@ -13,6 +14,7 @@ interface CardProps {
   // Optional overrides appended at the end to take precedence
   textClassName?: string;
   imageClassName?: string;
+  responsive?: boolean;
 }
 
 const TEMPLATE_BG: Record<NonNullable<CardProps['template']>, string> = {
@@ -27,8 +29,8 @@ export const CardPreview = ({
   avatarUrl,
   className,
   template = 'bg1',
-  imageSize,
   imageClassName,
+  responsive = true,
 }: CardProps) => {
   const bg = TEMPLATE_BG[template];
 
@@ -36,12 +38,18 @@ export const CardPreview = ({
   const displayAvatar = avatarUrl;
 
   return (
-    <div className={`relative flex h-full w-full flex-col overflow-hidden text-white ${className || ''}`}>
+    <div className={cn('relative flex h-full w-full flex-col overflow-hidden text-white', className)}>
       <img src={bg} alt="Background" className="absolute inset-0 z-0 h-full w-full object-cover" />
       <div className="relative z-10 flex flex-1 items-center justify-center">
         <div className="border border-white/25">
           <div
-            className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-black text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
+            className={cn(
+              'relative flex items-center justify-center overflow-hidden',
+              responsive
+                ? 'h-[120px] w-[120px] md:h-[200px] md:w-[200px] lg:h-[250px] lg:w-[250px]'
+                : 'h-[250px] w-[250px]',
+              imageClassName
+            )}
           >
             <img
               src={displayAvatar ? avatarUrl : 'https://placehold.co/400x400'}
@@ -49,7 +57,12 @@ export const CardPreview = ({
               className="h-full w-full object-cover"
             />
           </div>
-          <div className={`bg-[#030F1C33] text-[10px] backdrop-blur-2xl md:text-base lg:px-2 lg:py-1 lg:text-lg`}>
+          <div
+            className={cn(
+              'bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f]',
+              responsive ? 'p-1 text-[10px] md:text-base lg:px-2 lg:py-1 lg:text-lg' : 'px-2 py-1 text-lg'
+            )}
+          >
             @{username}
           </div>
         </div>
