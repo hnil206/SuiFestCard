@@ -16,8 +16,8 @@ interface CardProps {
 }
 
 const TEMPLATE_BG: Record<NonNullable<CardProps['template']>, string> = {
-  bg1: '/teamplate/card/bg1.png',
-  bg2: '/teamplate/card/bg2.png',
+  bg1: '/teamplate/card/bg_1.webp',
+  bg2: '/teamplate/card/bg_2.webp',
   bg3: '/teamplate/card/bg3.png',
 };
 
@@ -36,18 +36,10 @@ export const CardPreview = ({
   const displayAvatar = avatarUrl;
 
   return (
-    <div
-      className={`relative flex h-full w-full flex-col overflow-hidden text-white ${className || ''}`}
-      // style={{
-      //   backgroundImage: `url(${bg})`,
-      //   backgroundSize: 'contain',
-      //   backgroundPosition: 'center',
-      //   backgroundRepeat: 'no-repeat',
-      // }}
-    >
-      <img src={bg} alt="Background" className="absolute inset-0 z-0 h-full w-full object-fill" />
+    <div className={`relative flex h-full w-full flex-col overflow-hidden text-white ${className || ''}`}>
+      <img src={bg} alt="Background" className="absolute inset-0 z-0 h-full w-full object-cover" />
       <div className="relative z-10 flex flex-1 items-center justify-center">
-        <div>
+        <div className="border border-white/25">
           <div
             className={`relative flex h-[${imageSize}] w-[${imageSize}] items-center justify-center overflow-hidden bg-black text-black lg:h-[350px] lg:w-[350px] ${imageClassName || ''}`}
           >
@@ -57,9 +49,7 @@ export const CardPreview = ({
               className="h-full w-full object-cover"
             />
           </div>
-          <div
-            className={`bg-gradient-to-r from-[#8c6037] via-[#853d51] to-[#09120f] text-[10px] md:text-base lg:px-2 lg:py-1 lg:text-lg`}
-          >
+          <div className={`bg-[#030F1C33] text-[10px] backdrop-blur-2xl md:text-base lg:px-2 lg:py-1 lg:text-lg`}>
             @{username}
           </div>
         </div>

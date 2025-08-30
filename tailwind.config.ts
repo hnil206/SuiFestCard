@@ -25,6 +25,15 @@ const config: Config = {
         normal: '400',
         medium: '500',
       },
+      animation: {
+        marquee: 'marquee linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
     },
   },
   plugins: [],

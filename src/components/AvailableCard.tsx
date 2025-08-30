@@ -1,5 +1,7 @@
 import React from 'react';
 
+import CardText from './card-text';
+
 interface AvailableCardProps {
   className?: React.HTMLAttributes<HTMLDivElement>['className'];
 }
@@ -10,13 +12,8 @@ const AvailableCard = ({ className }: AvailableCardProps) => {
       className={`flex h-full max-h-[940px] w-full max-w-[600px] flex-col justify-between border border-gray-200 bg-white p-2 text-black shadow-md md:p-4 lg:p-4 ${className}`}
     >
       {/* Top Section */}
-      <div>
-        <h1 className="text-2xl font-medium leading-tight md:text-6xl lg:mb-4 lg:text-7xl">
-          I'm going
-          <br />
-          to SuiFest
-        </h1>
-        <p className="mb-3 text-sm font-normal md:text-2xl lg:mb-8 lg:text-3xl">sui.io/suifest</p>
+      <div className="mb-8 pt-2 lg:mb-0">
+        <CardText className="h-fit max-w-full md:w-[240px]" />
       </div>
       {/* Bottom Section */}
       <div>
