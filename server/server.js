@@ -321,7 +321,7 @@ app.get('/auth/twitter/callback', async (req, res) => {
     // Redirect back to frontend with user data
     const frontendUrl = new URL(process.env.FRONTEND_URL);
     frontendUrl.searchParams.set('auth', 'success');
-    frontendUrl.searchParams.set('user', btoa(JSON.stringify(userData)));
+    frontendUrl.searchParams.set('user', encodeURIComponent(JSON.stringify(userData)));
 
     res.redirect(frontendUrl.toString());
   } catch (error) {

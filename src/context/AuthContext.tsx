@@ -16,7 +16,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     if (auth === 'success' && userParam) {
       try {
-        const userData = JSON.parse(atob(userParam)) as User;
+        const userData = JSON.parse(decodeURIComponent(userParam)) as User;
         setUser(userData);
         sessionStorage.setItem('user', JSON.stringify(userData));
 
