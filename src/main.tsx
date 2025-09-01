@@ -25,7 +25,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <App router={router} />
+      <App router={router as any} />
     </StrictMode>
   );
 }

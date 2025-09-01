@@ -6,15 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "format:write": "prettier --write \"./**/*.{ts,tsx}\" --cache",
     "format:check": "prettier --check \"./**/*.{ts,tsx}\" --cache",
     "check-types": "tsc --noEmit --pretty",
-    "clean": "rimraf .next out",
+    "clean": "rimraf dist",
     "preinstall": "husky install",
     "prepare": "husky install",
-    "preview": "vite preview"
+    "deploy": "pnpm run build && vercel --prod",
+    "deploy:preview": "pnpm run build && vercel"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
