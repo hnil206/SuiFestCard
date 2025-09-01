@@ -7,9 +7,11 @@ const LandingCard = (props: SVGProps<SVGSVGElement>) => (
         <div
           style={{
             backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
             clipPath: 'url(#b)',
             height: '100%',
             width: '100%',
+            background: 'rgba(255, 255, 255, 0.001)',
           }}
         />
       </foreignObject>
@@ -33,7 +35,7 @@ const LandingCard = (props: SVGProps<SVGSVGElement>) => (
     </g>
     <defs>
       <clipPath id="b" transform="translate(20 20)">
-        <path d="M1990 514H0V0h1990zM734.343 38c-14.912 0-27 12.089-27 27v380c0 14.912 12.088 27 27 27h256V38z" />
+        <path d="M1990 514H0V0h1990zM730.343 38c-14.912 0-27 12.089-27 27v386c0 14.912 12.088 27 27 27h527.667c14.912 0 27-12.088 27-27V65c0-14.911-12.088-27-27-27H730.343z" />
       </clipPath>
       <clipPath id="a">
         <path fill="#fff" d="M0 0h1990v514H0z" />
