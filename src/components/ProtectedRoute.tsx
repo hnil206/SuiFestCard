@@ -39,9 +39,9 @@ const ProtectedRoute = ({ children, fallback }: ProtectedRouteProps) => {
       fallback || (
         <div className="flex flex-col overflow-x-clip">
           {/* Top section with login */}
-          <div className="flex w-full flex-col-reverse items-center justify-center gap-8 pb-12 pt-8 md:flex-col md:pb-16 md:pt-12">
+          <div className="flex w-full flex-col-reverse items-center justify-center gap-8 pb-12 pt-8 md:flex-col md:pb-16">
             <div className="flex w-full flex-col items-center justify-center px-5 md:px-0">
-              <div className="w-full max-w-2xl pb-6 text-center text-xl font-medium leading-tight md:pb-12 lg:text-[40px]">
+              <div className="w-full max-w-2xl pb-6 text-center text-xl font-medium leading-tight lg:text-[40px]">
                 <p>Log in to create your personalized</p>
                 <p>#SuiFest Card</p>
               </div>
@@ -57,6 +57,18 @@ const ProtectedRoute = ({ children, fallback }: ProtectedRouteProps) => {
               >
                 {isLoginLoading ? 'Loading...' : <>Login with</>}
               </Button>
+
+              <p className="mt-4 text-center text-base font-normal leading-tight md:text-lg">
+                Haven’t registered? Register for SuiFest here:{' '}
+                <a
+                  className="text-blue-500 underline"
+                  href="https://luma.com/SuiFest"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://luma.com/SuiFest
+                </a>
+              </p>
             </div>
 
             <LandingBackground />

@@ -94,9 +94,8 @@ const Home = () => {
                   template={template}
                   avatarUrl={avatar}
                   textSize="8xl"
-                  imageSize="120px"
                   textClassName="text-5xl"
-                  imageClassName="h-[200px] w-[200px] lg:h-[400px] lg:w-[400px]"
+                  imageClassName="h-[200px] w-[200px] lg:h-[300px] lg:w-[300px]"
                   className="h-full min-h-[493px] w-full min-w-[335px] rounded-[32px] border-[16px] border-[#1f1f1f] text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] lg:rounded-[64px]"
                 />
               </div>
