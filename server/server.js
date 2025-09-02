@@ -63,6 +63,7 @@ const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME || 'suifest-uploads';
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:5173',
+  'http://192.168.3.128:5173',
   'http://localhost:3000',
   'http://1td35nyksqqhwehzziwo0rr8ubzbh9rb42vci7u5dj3rqd0web.localhost:3000', // Your specific Walrus site
   /^http:\/\/.*\.localhost:3000$/, // Allow any subdomain on localhost:3000

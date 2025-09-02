@@ -8,7 +8,10 @@ const Login = () => {
     try {
       setIsLoading(true);
       const authUrl = await getAuthUrl();
-      window.location.href = authUrl;
+
+      // Safari-compatible redirect using window.open with _self target
+      // This prevents Safari from blocking the redirect as a popup
+      window.open(authUrl, '_self');
     } catch (error) {
       console.error('Login failed:', error);
       alert('Failed to initiate login. Please try again.');
