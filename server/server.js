@@ -124,13 +124,17 @@ app.post('/api/upload-image', upload.single('image'), async (req, res) => {
     const fileExtension = req.file.originalname.split('.').pop() || 'png';
     const s3Key = `${imageId}.${fileExtension}`; // Remove uploads/ prefix
 
-    // Upload to S3
+    // Upload to S3 with optimized caching for Twitter crawler
     const uploadCommand = new PutObjectCommand({
       Bucket: S3_BUCKET_NAME,
       Key: s3Key,
       Body: req.file.buffer,
       ContentType: req.file.mimetype,
-      CacheControl: 'public, max-age=86400', // Cache for 24 hours
+      CacheControl: 'public, max-age=31536000, immutable', // Cache for 1 year (images don't change)
+      Metadata: {
+        'twitter-optimized': 'true',
+        'uploaded-at': new Date().toISOString(),
+      },
     });
 
     await s3Client.send(uploadCommand);
@@ -150,17 +154,20 @@ app.post('/api/upload-image', upload.single('image'), async (req, res) => {
   }
 });
 
-// Serve uploaded image (redirect to S3)
+// Serve uploaded image (optimized for Twitter crawler)
 app.get('/api/image/:imageId', async (req, res) => {
   try {
     const { imageId } = req.params;
+    const userAgent = req.get('User-Agent') || '';
+    const isTwitterBot = userAgent.includes('Twitterbot') || userAgent.includes('facebookexternalhit');
 
     // Try common image extensions
     const extensions = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
     let imageUrl = null;
+    let s3Key = null;
 
     for (const ext of extensions) {
-      const s3Key = `${imageId}.${ext}`;
+      s3Key = `${imageId}.${ext}`;
       try {
         // Check if the object exists by attempting to get its metadata
         await s3Client.send(
@@ -183,7 +190,16 @@ app.get('/api/image/:imageId', async (req, res) => {
       return res.status(404).json({ error: 'Image not found' });
     }
 
-    // Redirect to S3 URL for better performance
+    // For Twitter bots, use permanent redirect with aggressive caching
+    if (isTwitterBot) {
+      res.set({
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'X-Robots-Tag': 'noindex, nofollow',
+      });
+      return res.redirect(301, imageUrl); // Permanent redirect for bots
+    }
+
+    // For regular users, use temporary redirect
     res.redirect(302, imageUrl);
   } catch (error) {
     console.error('Error serving image:', error);
@@ -238,8 +254,14 @@ app.get('/share/:imageId', async (req, res) => {
     const directImageUrl = `https://${S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`;
     const shareUrl = `${req.protocol}://${req.get('host')}/share/${imageId}`;
 
-    // Use Handlebars template for proper server-side rendering
-    res.set('Cache-Control', 'public, max-age=3600');
+    // Optimize for Twitter crawler with aggressive caching
+    res.set({
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400', // 24 hours
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'SAMEORIGIN',
+      Vary: 'User-Agent',
+    });
+
     res.render('share', {
       title: 'SuiFest Card',
       description: 'Check out this amazing SuiFest Card! Create your own and join the community.',

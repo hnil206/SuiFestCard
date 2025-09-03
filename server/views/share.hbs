@@ -5,6 +5,10 @@
     <title>{{title}}</title>
     <meta name='description' content='{{description}}' />
 
+    <!-- Preload critical image for faster Twitter crawler -->
+    <link rel='preload' as='image' href='{{imageUrl}}' />
+    <link rel='dns-prefetch' href='{{imageUrl}}' />
+
     <!-- Open Graph / Facebook -->
     <meta property='og:type' content='article' />
     <meta property='og:url' content='{{shareUrl}}' />

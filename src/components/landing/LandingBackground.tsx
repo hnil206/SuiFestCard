@@ -23,9 +23,9 @@ const sphereVideo = [
 const LandingBackground = () => {
   return (
     <div className="relative w-full py-8">
-      <Marquee speed={30} className="flex h-full items-center">
+      <Marquee speed={30} className="mx-auto flex h-full max-w-[2930px] items-center overflow-hidden">
         <div className="pointer-events-none flex items-center gap-2 py-2 pr-8">
-          {sphereVideo.map((x, index) => (
+          {[...sphereVideo, ...sphereVideo].map((x, index) => (
             <div key={index} className="aspect-square h-[180px] shrink-0 overflow-hidden rounded-full md:h-[380px]">
               <video autoPlay loop muted playsInline className="h-full w-full object-cover">
                 <source src={x[0]} />
