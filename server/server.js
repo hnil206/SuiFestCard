@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import { engine } from 'express-handlebars';
+import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import { TwitterApi } from 'twitter-api-v2';
 import { v4 as uuidv4 } from 'uuid';
@@ -99,6 +100,32 @@ app.use(
 );
 app.use(express.json());
 
+// JWT Token validation middleware
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  console.log('Auth header:', authHeader);
+  console.log('Extracted token:', token ? token.substring(0, 20) + '...' : 'No token');
+
+  if (!token) {
+    console.log('No token provided');
+    return res.status(401).json({ error: 'Access token required' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      console.log('Token verification failed:', err.message);
+      return res.status(403).json({ error: 'Invalid or expired token' });
+    }
+    console.log('Token verified successfully for user:', user.username);
+    req.user = user;
+    next();
+  });
+};
+
 // Twitter OAuth client
 const twitterClient = new TwitterApi({
   clientId: process.env.TWITTER_CLIENT_ID,
@@ -114,7 +141,7 @@ app.get('/health', (req, res) => {
 });
 
 // Upload image for sharing
-app.post('/api/upload-image', upload.single('image'), async (req, res) => {
+app.post('/api/upload-image', authenticateToken, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No image file provided' });
@@ -329,7 +356,17 @@ app.get('/auth/twitter/callback', async (req, res) => {
       'user.fields': ['profile_image_url', 'public_metrics', 'verified'],
     });
 
-    // In a real app, you'd store the tokens securely and create a session
+    // Generate JWT token for the user
+    const jwtToken = jwt.sign(
+      {
+        id: user.data.id,
+        username: user.data.username,
+        name: user.data.name,
+      },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
     const userData = {
       id: user.data.id,
       username: user.data.username,
@@ -337,8 +374,7 @@ app.get('/auth/twitter/callback', async (req, res) => {
       profileImageUrl: user.data.profile_image_url,
       verified: user.data.verified,
       publicMetrics: user.data.public_metrics,
-      accessToken, // In production, don't send this to frontend
-      refreshToken, // In production, don't send this to frontend
+      token: jwtToken, // JWT token for API authentication
     };
 
     // Redirect back to frontend with user data
@@ -360,9 +396,8 @@ app.get('/auth/twitter/callback', async (req, res) => {
 });
 
 // Get user profile (protected route)
-app.get('/api/user/:userId', async (req, res) => {
+app.get('/api/user/:userId', authenticateToken, async (req, res) => {
   try {
-    // In production, validate the user's token here
     const { userId } = req.params;
 
     const user = await twitterClient.v2.user(userId, {

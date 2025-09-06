@@ -1,3 +1,4 @@
+import { User } from '@/context/types';
 import { AuthServerUrl } from '@/utils/constant';
 import axios from 'axios';
 
@@ -11,7 +12,18 @@ const axiosClient = axios.create({
 // Add a request interceptor
 axiosClient.interceptors.request.use(
   function (config) {
-    // Do something before request is sent
+    // Add auth token to requests if available
+    const userData = sessionStorage.getItem('user');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData) as User;
+        if (user.token) {
+          config.headers.Authorization = `Bearer ${user.token}`;
+        }
+      } catch (error) {
+        console.error('Failed to parse user data from sessionStorage', error);
+      }
+    }
     return config;
   },
   function (error) {

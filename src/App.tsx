@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider, type createRouter } from '@tanstack/react-router';
 
 import Layout from './components/layout';
@@ -17,7 +16,7 @@ const App = ({ router }: AppProps) => {
           <RouterProvider router={router} />
         </Layout>
       </AuthProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 };

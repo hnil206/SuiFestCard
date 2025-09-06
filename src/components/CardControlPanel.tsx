@@ -111,12 +111,29 @@ export function CardControlPanel(props: CardControlPanelProps) {
                 type="button"
                 onClick={() => onTemplateChange(t.key)}
                 className={
-                  'h-20 w-20 overflow-hidden rounded-2xl border shadow-inner transition lg:h-[124px] lg:w-[124px] ' +
-                  (template === t.key ? 'ring-2 ring-white' : 'border-white/10 hover:border-white/30')
+                  'relative h-20 w-20 overflow-hidden rounded-lg border shadow-inner transition lg:h-[124px] lg:w-[124px] lg:rounded-2xl ' +
+                  (template === t.key ? 'ring-1 ring-white' : 'border-white/10 hover:border-white/30')
                 }
                 aria-label={`Template ${t.key}`}
               >
                 <img src={t.image} alt={`Template ${t.key}`} className="h-full w-full rounded-2xl object-cover" />
+                {template === t.key && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/50">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-6 w-6 text-white"
+                    >
+                      <polyline points="20,6 9,17 4,12" />
+                    </svg>
+                  </div>
+                )}
               </button>
             ))}
           </div>

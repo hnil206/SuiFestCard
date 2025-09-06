@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { AuthServerUrl } from '@/utils/constant';
+import { getShareLink } from '@/api/auth/getShareLink';
 import html2canvas from 'html2canvas';
 
 import AvailableCard from '@/components/AvailableCard';
@@ -59,22 +59,8 @@ const PreviewPage = () => {
         throw new Error('Failed to capture image');
       }
 
-      // Create FormData for upload
-      const formData = new FormData();
-      formData.append('image', file);
-
-      // Upload image to server
-      const uploadResponse = await fetch(`${AuthServerUrl}/api/upload-image`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!uploadResponse.ok) {
-        throw new Error('Failed to upload image');
-      }
-
-      const responseData = (await uploadResponse.json()) as { success: boolean; shareUrl: string; imageId: string };
-      const { shareUrl } = responseData;
+      const response = await getShareLink(file);
+      const { shareUrl } = response;
 
       // Open Twitter share intent with the server's share URL
       const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`;

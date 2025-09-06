@@ -54,6 +54,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 
     setIsLoading(false);
+
+    // Listen for automatic logout events from axios interceptor
+    const handleAutoLogout = () => {
+      setUser(null);
+    };
+
+    window.addEventListener('auth:logout', handleAutoLogout);
+
+    return () => {
+      window.removeEventListener('auth:logout', handleAutoLogout);
+    };
   }, []);
 
   const login = (userData: User) => {

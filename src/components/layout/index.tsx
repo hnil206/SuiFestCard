@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 
+import FloatingLogoutButton from '../FloatingLogoutButton';
 import Footer from './Footer';
 import Header from './Header';
 
@@ -13,6 +14,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Header />
       <main className="relative z-10 flex-1">{children}</main>
       <Footer />
+      <FloatingLogoutButton />
     </div>
   );
 };

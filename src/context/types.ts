@@ -10,6 +10,7 @@ export interface User {
     tweet_count: number;
     listed_count: number;
   };
+  token?: string; // JWT token for API authentication
 }
 
 export interface AuthContextType {
